@@ -12,10 +12,10 @@ const queueCommand = {
         }
 
         if (args.length === 0) {
-            return message.reply(queueSystem.getQueueString());
+            return message.reply(queueSystem.getQueueString(message.guild.id));
         }
         const video = await youtube.getVideo(args[0]);
-        await queueSystem.addSongToQueue(video, voiceChannel);
+        await queueSystem.addSongToQueue(message.guild.id, video, voiceChannel);
         message.reply(`Song added to queue ${video.title}`);
     },
 };

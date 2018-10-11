@@ -14,10 +14,13 @@ const playCommand = {
         }
 
         const video = await youtube.getVideo(args[0]);
-        const index = await queueSystem.addSongToQueue(video, voiceChannel);
+        const index = await queueSystem.addSongToQueue(message.guild.id, video, voiceChannel);
         // console.log(queueSystem.getIsPlaying());
         if (!queueSystem.getIsPlaying()) {
-            songPlayer.playYoutubeVideo({ index });
+            songPlayer.playYoutubeVideo({
+                id: message.guild.id,
+                index,
+            });
         }
     },
 };

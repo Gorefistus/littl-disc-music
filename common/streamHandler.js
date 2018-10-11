@@ -2,16 +2,16 @@ const ytdl = require('ytdl-core');
 const queueHandler = require('./queueHandler');
 
 const songPlayer = {
-    playYoutubeVideo: ({ index } = {}) => {
+    playYoutubeVideo: ({ id, index } = {}) => {
         console.log(index);
         let videoObj;
         if (index) {
-            videoObj = queueHandler.getSongByIndex(index);
+            videoObj = queueHandler.getSongByIndex(id, index);
         } else {
-            videoObj = queueHandler.getNextSong();
+            videoObj = queueHandler.getNextSong(id);
         }
         if (videoObj) {
-            const dispatcher = queueHandler.getConnection()
+            const dispatcher = queueHandler.getConnection(id)
                 .playStream(ytdl(videoObj.url));
 
             queueHandler.setIsPlaying(true);

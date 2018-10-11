@@ -1,95 +1,111 @@
 let queue;
-let currentSongIndex;
-let connection;
-let isPlaying;
 
 class QueueHandler {
     constructor() {
-        queue = [];
-        currentSongIndex = -1;
-        isPlaying = false;
+        queue = new Map();
     }
 
-    getCurrentSongIndex() {
-        return currentSongIndex;
+    getCurrentSongIndex(guildId) {
+        const serverQueue = queue.get(guildId);
+        return serverQueue.currentSongIndex;
     }
 
-    getQueueString() {
-        if (queue.length === 0) {
+    getQueueString(guildId) {
+        const serverQueue = queue.get(guildId);
+        if (serverQueue.songs === 0) {
             return 'Queue is empty!';
         }
         let stringToReturn = '';
-        queue.forEach((song, index) => {
+        serverQueue.songs.forEach((song, index) => {
             stringToReturn += `\n${song.title}`;
         });
         return stringToReturn;
     }
 
-    getCurrentSong() {
-        if (currentSongIndex > -1) {
-            return queue[currentSongIndex];
+    getCurrentSong(guildId) {
+        const serverQueue = queue.get(guildId);
+        if (serverQueue.currentSongIndex > -1) {
+            return serverQueue.songs[currentSongIndex];
         }
         return undefined;
     }
 
-    getSongByIndex(index) {
+    getSongByIndex(guildId, index) {
+        const serverQueue = queue.get(guildId);
         if (index > -1) {
-            currentSongIndex = index;
+            serverQueue.currentSongIndex = index;
         }
-        return queue[index];
+        return serverQueue.songs[index];
     }
 
-    async addSongToQueue(video, voiceChannel) {
-        connection = await voiceChannel.join();
-        queue.push(video);
-        return queue.length - 1;
+    async addSongToQueue(guildId, video, voiceChannel) {
+        const serverQueue = queue.get(guildId);
+        if (!serverQueue) {
+            const queueConstruct = {
+                voiceChannel,
+                connection: null,
+                songs: [],
+                volume: 5,
+                playing: true,
+                currentSongIndex: -1,
+            };
+            queue.set(guildId, queueConstruct);
+
+            queueConstruct.songs.push(video);
+            queueConstruct.connection = await voiceChannel.join();
+            return queueConstruct.songs.length - 1;
+        }
+        serverQueue.songs.push(video);
+        return serverQueue.songs.length - 1;
     }
 
-    getNextSong() {
-        if (currentSongIndex > -1) {
-            if (currentSongIndex + 1 >= queue.length) {
-                currentSongIndex = -1;
+    getNextSong(guildId) {
+        const serverQueue = queue.get(guildId);
+        if (serverQueue.currentSongIndex > -1) {
+            if (serverQueue.currentSongIndex + 1 >= serverQueue.songs.length) {
+                serverQueue.currentSongIndex = -1;
                 return undefined;
             }
-            currentSongIndex++;
-            return queue[currentSongIndex];
+            serverQueue.currentSongIndex++;
+            return serverQueue.songs[serverQueue.currentSongIndex];
         }
-        if (queue.length > 0) {
-            currentSongIndex = 0;
-            return queue[0];
+        if (serverQueue.songs.length > 0) {
+            serverQueue.currentSongIndex = 0;
+            return serverQueue.songs[0];
         }
-        currentSongIndex = -1;
+        serverQueue.currentSongIndex = -1;
         return undefined;
     }
 
-    getPreviousSong() {
-        if (currentSongIndex > -1) {
-            if (currentSongIndex - 1 < 0) {
-                currentSongIndex = -1;
+    getPreviousSong(guildId) {
+        const serverQueue = queue.get(guildId);
+        if (serverQueue.currentSongIndex > -1) {
+            if (serverQueue.currentSongIndex - 1 < 0) {
+                serverQueue.currentSongIndex = -1;
                 return undefined;
             }
-            currentSongIndex--;
-            return queue[currentSongIndex];
+            serverQueue.currentSongIndex--;
+            return serverQueue.songs[currentSongIndex];
         }
-        if (queue.length > 0) {
-            currentSongIndex = 0;
-            return queue[0];
+        if (serverQueue.songs.length > 0) {
+            serverQueue.currentSongIndex = 0;
+            return serverQueue.songs[0];
         }
-        currentSongIndex = -1;
+        serverQueue.currentSongIndex = -1;
         return undefined;
     }
 
-    getConnection() {
-        return connection;
+    getConnection(guildId) {
+        return queue.get(guildId).connection;
     }
 
-    getIsPlaying() {
-        return isPlaying;
+    getIsPlaying(guildId) {
+        return queue.get(guildId).playing;
     }
 
-    setIsPlaying(val) {
+    setIsPlaying(guildId, val) {
         console.log(val);
-        isPlaying = val;
+        queue.get(guildId).playing = val;
     }
 }
 
