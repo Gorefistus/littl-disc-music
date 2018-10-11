@@ -14,8 +14,8 @@ const resumeCommand = {
                 return message.channel.send('I cannot speak in this voice channel, make sure I have the proper permissions!');
             }
 
-            if (queueSystem.getIsPlaying()) {
-                queueSystem.getConnection().dispatcher.resume();
+            if (queueSystem.getIsPlaying(message.guild.id)) {
+                queueSystem.getConnection(message.guild.id).dispatcher.resume();
                 console.log('resumed current song');
             }
         },

@@ -14,8 +14,8 @@ const nextCommand = {
                 return message.channel.send('I cannot speak in this voice channel, make sure I have the proper permissions!');
             }
 
-            if (queueSystem.getIsPlaying()) {
-                queueSystem.getConnection().dispatcher.end();
+            if (queueSystem.getIsPlaying(message.guild.id)) {
+                queueSystem.getConnection(message.guild.id).dispatcher.end();
                 console.log('stopped current song');
             // let nextsongid=queueSystem.getCurrentSongIndex();
             // console.log('nextsongid '+nextsongid);

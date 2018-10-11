@@ -46,7 +46,7 @@ class QueueHandler {
                 connection: null,
                 songs: [],
                 volume: 5,
-                playing: true,
+                playing: false,
                 currentSongIndex: -1,
             };
             queue.set(guildId, queueConstruct);

@@ -19,7 +19,7 @@ const volumeCommand = {
                 message.react('😂');
                 const volumeParsed = Number.parseFloat(args) / 100;
                 if (volumeParsed) {
-                    queueSystem.getConnection().dispatcher.setVolume(volumeParsed);
+                    queueSystem.getConnection(message.guild.id).dispatcher.setVolume(volumeParsed);
                     console.log(`changing volume to ${volumeParsed} 😂`);
                 }
             }

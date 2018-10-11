@@ -15,7 +15,7 @@ const pauseCommand = {
             }
 
             if (queueSystem.getIsPlaying()) {
-                queueSystem.getConnection().dispatcher.pause();
+                queueSystem.getConnection(message.guild.id).dispatcher.pause();
                 console.log('paused current song');
             }
         },
