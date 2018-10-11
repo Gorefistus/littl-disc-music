@@ -48,10 +48,10 @@ class QueueHandler {
     getNextSong() {
         if (currentSongIndex > -1) {
             if (currentSongIndex + 1 >= queue.length) {
-                currentSongIndex = 0;
-            } else {
-                currentSongIndex++;
+                currentSongIndex = -1;
+                return undefined;
             }
+            currentSongIndex++;
             return queue[currentSongIndex];
         }
         if (queue.length > 0) {
@@ -65,10 +65,10 @@ class QueueHandler {
     getPreviousSong() {
         if (currentSongIndex > -1) {
             if (currentSongIndex - 1 < 0) {
-                currentSongIndex = queue.length - 1;
-            } else {
-                currentSongIndex--;
+                currentSongIndex = -1;
+                return undefined;
             }
+            currentSongIndex--;
             return queue[currentSongIndex];
         }
         if (queue.length > 0) {
@@ -88,6 +88,7 @@ class QueueHandler {
     }
 
     setIsPlaying(val) {
+        console.log(val);
         isPlaying = val;
     }
 }

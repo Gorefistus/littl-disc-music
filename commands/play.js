@@ -17,7 +17,7 @@ const playCommand = {
         const index = await queueSystem.addSongToQueue(video, voiceChannel);
         // console.log(queueSystem.getIsPlaying());
         if (!queueSystem.getIsPlaying()) {
-            songPlayer.playYoutubeVideoByIndex(index);
+            songPlayer.playYoutubeVideo({ index });
         }
     },
 };
