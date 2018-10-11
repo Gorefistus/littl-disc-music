@@ -1,98 +1,95 @@
-let queue
-let currentSongIndex
-let connection
-let isPlaying
+let queue;
+let currentSongIndex;
+let connection;
+let isPlaying;
 
 class QueueHandler {
-  constructor () {
-    queue = []
-    currentSongIndex = -1
-    isPlaying = false
-  }
-
-  getCurrentSongIndex () {
-    return currentSongIndex
-  }
-
-  getQueueString () {
-    if (queue.length === 0) {
-      return 'Queue is empty!'
-    } else {
-      let stringToReturn = ''
-      queue.forEach((song, index) => {
-        stringToReturn += `\n${song.title}`
-      })
-      return stringToReturn
+    constructor() {
+        queue = [];
+        currentSongIndex = -1;
+        isPlaying = false;
     }
-  }
 
-  getCurrentSong () {
-    if (currentSongIndex > -1) {
-      return queue[currentSongIndex]
+    getCurrentSongIndex() {
+        return currentSongIndex;
     }
-    return undefined
-  }
 
-  getSongByIndex (index) {
-    if (index > -1) {
-      currentSongIndex = index
+    getQueueString() {
+        if (queue.length === 0) {
+            return 'Queue is empty!';
+        }
+        let stringToReturn = '';
+        queue.forEach((song, index) => {
+            stringToReturn += `\n${song.title}`;
+        });
+        return stringToReturn;
     }
-    return queue[index]
-  }
 
-  async addSongToQueue (video, voiceChannel) {
-    connection = await voiceChannel.join()
-    queue.push(video)
-    return queue.length - 1
-  }
-
-  getNextSong () {
-    if (currentSongIndex > -1) {
-      if (currentSongIndex + 1 >= queue.length) {
-        currentSongIndex = 0
-      } else {
-        currentSongIndex++
-      }
-      return queue[currentSongIndex]
+    getCurrentSong() {
+        if (currentSongIndex > -1) {
+            return queue[currentSongIndex];
+        }
+        return undefined;
     }
-    if (queue.length > 0) {
-      currentSongIndex = 0
-      return queue[0]
-    } else {
-      currentSongIndex = -1
-      return undefined
+
+    getSongByIndex(index) {
+        if (index > -1) {
+            currentSongIndex = index;
+        }
+        return queue[index];
     }
-  }
 
-  getPreviousSong () {
-    if (currentSongIndex > -1) {
-      if (currentSongIndex - 1 < 0) {
-        currentSongIndex = queue.length - 1
-      } else {
-        currentSongIndex--
-      }
-      return queue[currentSongIndex]
+    async addSongToQueue(video, voiceChannel) {
+        connection = await voiceChannel.join();
+        queue.push(video);
+        return queue.length - 1;
     }
-    if (queue.length > 0) {
-      currentSongIndex = 0
-      return queue[0]
-    } else {
-      currentSongIndex = -1
-      return undefined
+
+    getNextSong() {
+        if (currentSongIndex > -1) {
+            if (currentSongIndex + 1 >= queue.length) {
+                currentSongIndex = 0;
+            } else {
+                currentSongIndex++;
+            }
+            return queue[currentSongIndex];
+        }
+        if (queue.length > 0) {
+            currentSongIndex = 0;
+            return queue[0];
+        }
+        currentSongIndex = -1;
+        return undefined;
     }
-  }
 
-  getConnection () {
-    return connection
-  }
+    getPreviousSong() {
+        if (currentSongIndex > -1) {
+            if (currentSongIndex - 1 < 0) {
+                currentSongIndex = queue.length - 1;
+            } else {
+                currentSongIndex--;
+            }
+            return queue[currentSongIndex];
+        }
+        if (queue.length > 0) {
+            currentSongIndex = 0;
+            return queue[0];
+        }
+        currentSongIndex = -1;
+        return undefined;
+    }
 
-  getIsPlaying () {
-    return isPlaying
-  }
+    getConnection() {
+        return connection;
+    }
 
-  setIsPlaying (val) {
-    isPlaying = val
-  }
+    getIsPlaying() {
+        return isPlaying;
+    }
+
+    setIsPlaying(val) {
+        isPlaying = val;
+    }
 }
 
-module.exports = new QueueHandler()
+module.exports = new QueueHandler();
