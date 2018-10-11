@@ -1,6 +1,7 @@
 let queue;
 let currentSongIndex;
 let connection;
+let isPlaying;
 
 class QueueHandler {
 
@@ -8,6 +9,7 @@ class QueueHandler {
     constructor() {
         queue = [];
         currentSongIndex = -1;
+        isPlaying = false;
     }
 
 
@@ -89,6 +91,13 @@ class QueueHandler {
 
     getConnection() {
         return connection;
+    }
+
+    getIsPlaying(){
+        return isPlaying;
+    }
+    setIsPlaying(val){
+        isPlaying=val;
     }
 
 }
