@@ -48,6 +48,7 @@ class QueueHandler {
                 volume: 5,
                 playing: false,
                 currentSongIndex: -1,
+                autoplay: false,
             };
             queue.set(guildId, queueConstruct);
 
@@ -104,8 +105,17 @@ class QueueHandler {
     }
 
     setIsPlaying(guildId, val) {
-        console.log(val);
+        console.log(`setIsPlaying val ${val}`);
         queue.get(guildId).playing = val;
+    }
+
+    getAutoplay(guildId) {
+        return queue.get(guildId).autoplay;
+    }
+
+    setAutoplay(guildId, val) {
+        console.log(`setAutoplay val ${val}`);
+        queue.get(guildId).autoplay = val;
     }
 }
 

@@ -1,7 +1,7 @@
 const songPlayer = require('../common/streamHandler');
 
-const pauseCommand = {
-    name: 'pause',
+const autoplayCommand = {
+    name: 'autoplay',
     execute:
         async (message, args, queueSystem, youtube) => {
             const voiceChannel = message.member.voiceChannel;
@@ -14,10 +14,13 @@ const pauseCommand = {
                 return message.channel.send('I cannot speak in this voice channel, make sure I have the proper permissions!');
             }
 
-            if (queueSystem.getIsPlaying(message.guild.id)) {
-                queueSystem.getConnection(message.guild.id).dispatcher.pause();
-                console.log('paused current song');
+            if (!queueSystem.getAutoplay(message.guild.id)) {
+                queueSystem.setAutoplay(message.guild.id, true);
+                message.channel.send('AutoPlay is now enabled');
+            } else {
+                queueSystem.setAutoplay(message.guild.id, false);
+                message.channel.send('AutoPlay is now disabled');
             }
         },
 };
-module.exports = pauseCommand;
+module.exports = autoplayCommand;

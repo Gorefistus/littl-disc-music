@@ -20,7 +20,11 @@ const playCommand = {
             songPlayer.playYoutubeVideo({
                 id: message.guild.id,
                 index,
-            });
+            }, youtube);
+            // console.log({ relatedToVideoId: video.id });
+            // const nextvideo = await youtube.searchVideos('', 1, { relatedToVideoId: video.id });
+            // console.log(nextvideo);
+            // console.log(`nextvideo[0].id = ${nextvideo[0].id}`);
         }
     },
 };

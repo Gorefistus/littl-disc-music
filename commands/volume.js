@@ -14,7 +14,7 @@ const volumeCommand = {
                 return message.channel.send('I cannot speak in this voice channel, make sure I have the proper permissions!');
             }
 
-            if (queueSystem.getIsPlaying()) {
+            if (queueSystem.getIsPlaying(message.guild.id)) {
                 console.log(args);
                 message.react('😂');
                 const volumeParsed = Number.parseFloat(args) / 100;
