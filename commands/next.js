@@ -17,9 +17,6 @@ const nextCommand = {
             if (queueSystem.getIsPlaying(message.guild.id)) {
                 queueSystem.getConnection(message.guild.id).dispatcher.end();
                 console.log('stopped current song');
-            // let nextsongid=queueSystem.getCurrentSongIndex();
-            // console.log('nextsongid '+nextsongid);
-            // songPlayer.playYoutubeVideoByIndex(++nextsongid);
             }
         },
 };

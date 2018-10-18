@@ -25,7 +25,7 @@ class QueueHandler {
     getCurrentSong(guildId) {
         const serverQueue = queue.get(guildId);
         if (serverQueue.currentSongIndex > -1) {
-            return serverQueue.songs[currentSongIndex];
+            return serverQueue.songs[serverQueue.currentSongIndex];
         }
         return undefined;
     }
@@ -56,8 +56,7 @@ class QueueHandler {
             queueConstruct.connection = await voiceChannel.join();
             return queueConstruct.songs.length - 1;
         }
-        serverQueue.songs.push(video);
-        return serverQueue.songs.length - 1;
+        return serverQueue.songs.push(video) - 1;
     }
 
     getNextSong(guildId) {
@@ -86,7 +85,7 @@ class QueueHandler {
                 return undefined;
             }
             serverQueue.currentSongIndex--;
-            return serverQueue.songs[currentSongIndex];
+            return serverQueue.songs[serverQueue.currentSongIndex];
         }
         if (serverQueue.songs.length > 0) {
             serverQueue.currentSongIndex = 0;
@@ -95,6 +94,12 @@ class QueueHandler {
         serverQueue.currentSongIndex = -1;
         return undefined;
     }
+
+    getLastSong(guildId) {
+        const serverQueue = queue.get(guildId);
+        return serverQueue.songs[serverQueue.songs.length - 1];
+    }
+
 
     getConnection(guildId) {
         return queue.get(guildId).connection;
@@ -105,7 +110,6 @@ class QueueHandler {
     }
 
     setIsPlaying(guildId, val) {
-        console.log(`setIsPlaying val ${val}`);
         queue.get(guildId).playing = val;
     }
 
@@ -113,9 +117,12 @@ class QueueHandler {
         return queue.get(guildId).autoplay;
     }
 
-    setAutoplay(guildId, val) {
-        console.log(`setAutoplay val ${val}`);
-        queue.get(guildId).autoplay = val;
+    setAutoplay(guildId) {
+        queue.get(guildId).autoplay = !queue.get(guildId).autoplay;
+    }
+
+    getVoiceChannel(guildId) {
+        return queue.get(guildId).voiceChannel;
     }
 }
 

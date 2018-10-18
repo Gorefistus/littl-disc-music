@@ -18,7 +18,7 @@ const playCommand = {
         // console.log(queueSystem.getIsPlaying());
         if (!queueSystem.getIsPlaying(message.guild.id)) {
             songPlayer.playYoutubeVideo({
-                id: message.guild.id,
+                guildId: message.guild.id,
                 index,
             }, youtube);
             // console.log({ relatedToVideoId: video.id });

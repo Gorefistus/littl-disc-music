@@ -2,42 +2,33 @@ const ytdl = require('ytdl-core');
 const queueHandler = require('./queueHandler');
 
 const songPlayer = {
-    playYoutubeVideo: ({ id, index } = {}, youtube) => {
+    playYoutubeVideo: async ({ guildId, index } = {}, youtube) => {
         let videoObj;
         if (index) {
-            videoObj = queueHandler.getSongByIndex(id, index);
+            videoObj = queueHandler.getSongByIndex(guildId, index);
         } else {
-            videoObj = queueHandler.getNextSong(id);
+            videoObj = queueHandler.getNextSong(guildId);
         }
         if (videoObj) {
-            const dispatcher = queueHandler.getConnection(id)
+            const dispatcher = queueHandler.getConnection(guildId)
                 .playStream(ytdl(videoObj.url));
 
-            queueHandler.setIsPlaying(id, true);
+            queueHandler.setIsPlaying(guildId, true);
             dispatcher.setVolume(0.06);
             dispatcher.on('end', (reason) => {
-                console.log(`playYoutubeVideo dispatcher.on end ${videoObj.title}`);
-                queueHandler.setIsPlaying(id, false);
-                songPlayer.playYoutubeVideo({ id: id });
-                console.log(`getCurrentSongIndex = ${queueHandler.getCurrentSongIndex(id)}`);
-
-                if ((queueHandler.getCurrentSongIndex(id) === -1) && (queueHandler.getAutoplay(id))) {
-                    console.log('in if');
-                    console.log(`youtube = ${youtube}`);
-                    youtube.searchVideos('', 1, { relatedToVideoId: videoObj.id })
-                        .then((searchResults) => {
-                            console.log(`searchresults = ${searchResults}`);
-                            youtube.getVideo(searchResults[0].id)
-                                .then((nextvideo) => {
-                                    queueHandler.addSongToQueue(nextvideo);
-                                });
-
-                        }
-                        );
-                    // queueHandler.addSongToQueue(id);
-                }
+                queueHandler.setIsPlaying(guildId, false);
+                songPlayer.playYoutubeVideo({ guildId }, youtube);
             })
                 .on('error', error => console.error(error));
+        } else if (queueHandler.getAutoplay(guildId)) {
+            const prevVideoObj = queueHandler.getLastSong(guildId);
+            const nextYTVideo = await youtube.searchVideos('', 1, { relatedToVideoId: prevVideoObj.id });
+            const nextYtVideoObj = await youtube.getVideoByID(nextYTVideo[0].id);
+            const videoIndex = await queueHandler.addSongToQueue(guildId, nextYtVideoObj, queueHandler.getVoiceChannel(guildId));
+            songPlayer.playYoutubeVideo({
+                guildId,
+                index: videoIndex,
+            }, youtube);
         }
     },
 

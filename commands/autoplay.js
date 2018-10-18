@@ -13,14 +13,8 @@ const autoplayCommand = {
             if (!permissions.has('SPEAK')) {
                 return message.channel.send('I cannot speak in this voice channel, make sure I have the proper permissions!');
             }
-
-            if (!queueSystem.getAutoplay(message.guild.id)) {
-                queueSystem.setAutoplay(message.guild.id, true);
-                message.channel.send('AutoPlay is now enabled');
-            } else {
-                queueSystem.setAutoplay(message.guild.id, false);
-                message.channel.send('AutoPlay is now disabled');
-            }
+            queueSystem.setAutoplay(message.guild.id);
+            message.channel.send(`AutoPlay is now ${queueSystem.getAutoplay(message.guild.id) ? 'enabled' : 'disabled'}`);
         },
 };
 module.exports = autoplayCommand;
