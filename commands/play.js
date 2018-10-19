@@ -14,17 +14,12 @@ const playCommand = {
         }
 
         const video = await youtube.getVideo(args[0]);
-        const index = await queueSystem.addSongToQueue(message.guild.id, video, voiceChannel);
-        // console.log(queueSystem.getIsPlaying());
+        const index = await queueSystem.addSongToQueue(message.guild.id, video, voiceChannel, message.channel);
         if (!queueSystem.getIsPlaying(message.guild.id)) {
             songPlayer.playYoutubeVideo({
                 guildId: message.guild.id,
                 index,
             }, youtube);
-            // console.log({ relatedToVideoId: video.id });
-            // const nextvideo = await youtube.searchVideos('', 1, { relatedToVideoId: video.id });
-            // console.log(nextvideo);
-            // console.log(`nextvideo[0].id = ${nextvideo[0].id}`);
         }
     },
 };

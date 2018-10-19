@@ -10,6 +10,7 @@ const songPlayer = {
             videoObj = queueHandler.getNextSong(guildId);
         }
         if (videoObj) {
+            queueHandler.getTextChannel(guildId).send(`Now playing - ${videoObj.title}`);
             const dispatcher = queueHandler.getConnection(guildId)
                 .playStream(ytdl(videoObj.url));
 

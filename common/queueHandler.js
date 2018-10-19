@@ -38,10 +38,11 @@ class QueueHandler {
         return serverQueue.songs[index];
     }
 
-    async addSongToQueue(guildId, video, voiceChannel) {
+    async addSongToQueue(guildId, video, voiceChannel, textChannel) {
         const serverQueue = queue.get(guildId);
         if (!serverQueue) {
             const queueConstruct = {
+                textChannel,
                 voiceChannel,
                 connection: null,
                 songs: [],
@@ -123,6 +124,10 @@ class QueueHandler {
 
     getVoiceChannel(guildId) {
         return queue.get(guildId).voiceChannel;
+    }
+
+    getTextChannel(guildId) {
+        return queue.get(guildId).textChannel;
     }
 }
 

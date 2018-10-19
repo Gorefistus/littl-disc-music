@@ -1,5 +1,5 @@
-const autoplayCommand = {
-    name: 'autoplay',
+const nowplaying = {
+    name: 'nowplaying',
     execute:
         async (message, args, queueSystem, youtube) => {
             const voiceChannel = message.member.voiceChannel;
@@ -11,8 +11,12 @@ const autoplayCommand = {
             if (!permissions.has('SPEAK')) {
                 return message.channel.send('I cannot speak in this voice channel, make sure I have the proper permissions!');
             }
-            queueSystem.setAutoplay(message.guild.id);
-            message.channel.send(`AutoPlay is now ${queueSystem.getAutoplay(message.guild.id) ? 'enabled' : 'disabled'}`);
+            const song =  queueSystem.getCurrentSong(message.guild.id);
+            if (song) {
+                message.channel.send(`Now playing - ${song.title}`);
+            } else {
+                message.channel.send('Nothing is playing right now');
+            }
         },
 };
-module.exports = autoplayCommand;
+module.exports = nowplaying;
