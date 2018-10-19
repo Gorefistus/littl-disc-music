@@ -1,3 +1,5 @@
+const embedWrapper = require('../common/embedWrapper');
+
 const queueCommand = {
     name: 'queue',
     execute: async (message, args, queueSystem, youtube) => {
@@ -12,7 +14,7 @@ const queueCommand = {
         }
 
         if (args.length === 0) {
-            return message.reply(queueSystem.getQueueString(message.guild.id));
+            return message.reply(embedWrapper.getQueueEmbed(message.guild.id));
         }
         let video;
         if (args[0].startsWith('http')) {

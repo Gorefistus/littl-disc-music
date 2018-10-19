@@ -129,6 +129,10 @@ class QueueHandler {
     getTextChannel(guildId) {
         return queue.get(guildId).textChannel;
     }
+
+    getQueue(guildId) {
+        return queue.get(guildId);
+    }
 }
 
 module.exports = new QueueHandler();

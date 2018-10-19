@@ -1,5 +1,6 @@
 const ytdl = require('ytdl-core');
 const queueHandler = require('./queueHandler');
+const embedWrapper = require('./embedWrapper');
 
 const songPlayer = {
     playYoutubeVideo: async ({ guildId, index } = {}, youtube) => {
@@ -10,7 +11,8 @@ const songPlayer = {
             videoObj = queueHandler.getNextSong(guildId);
         }
         if (videoObj) {
-            queueHandler.getTextChannel(guildId).send(`Now playing - ${videoObj.title}`);
+            const embed = embedWrapper.getNowPlayingEmbed(videoObj);
+            queueHandler.getTextChannel(guildId).send(embed);
             const dispatcher = queueHandler.getConnection(guildId)
                 .playStream(ytdl(videoObj.url));
 
