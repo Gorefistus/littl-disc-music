@@ -12,8 +12,13 @@ const playCommand = {
         if (!permissions.has('SPEAK')) {
             return message.channel.send('I cannot speak in this voice channel, make sure I have the proper permissions!');
         }
-
-        const video = await youtube.getVideo(args[0]);
+        let video;
+        if (args[0].startsWith('http')) {
+            video = await youtube.getVideo(args[0]);
+        } else {
+            const searchResult = await youtube.searchVideos(args, 1);
+            video = await youtube.getVideoByID(searchResult[0].id);
+        }
         const index = await queueSystem.addSongToQueue(message.guild.id, video, voiceChannel, message.channel);
         if (!queueSystem.getIsPlaying(message.guild.id)) {
             songPlayer.playYoutubeVideo({

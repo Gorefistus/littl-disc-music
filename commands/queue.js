@@ -14,7 +14,13 @@ const queueCommand = {
         if (args.length === 0) {
             return message.reply(queueSystem.getQueueString(message.guild.id));
         }
-        const video = await youtube.getVideo(args[0]);
+        let video;
+        if (args[0].startsWith('http')) {
+            video = await youtube.getVideo(args[0]);
+        } else {
+            const searchResult = await youtube.searchVideos(args, 1);
+            video = await youtube.getVideoByID(searchResult[0].id);
+        }
         await queueSystem.addSongToQueue(message.guild.id, video, voiceChannel);
         message.reply(`Song added to queue ${video.title}`);
     },
